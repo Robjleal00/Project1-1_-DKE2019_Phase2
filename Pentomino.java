@@ -1,5 +1,5 @@
 public class Pentomino {
-	private int [][] bits;
+	private int[][] bits;
 	private int pentID = 0;
 
 	private int x, y;
@@ -15,12 +15,12 @@ public class Pentomino {
 		for (int i = 0; i < numberOfRotations; i++)
 			PentominoBuilder.rotate(pentID);
 		for (int i = 0; i < numberOfReflections; i++) 
-			PentominoBuilder.reflext(pentID);
+			PentominoBuilder.reflect(pentID);
 
 		bits = PentominoBuilder.getBasicPent(pentID);		 
 	}
 
-	public Pentomino(int _x, int _y, int _pentID, bool randomized) {
+	public Pentomino(int _x, int _y, int _pentID, boolean randomized) {
 		x = _x;
 		y = _y;
 		pentID = _pentID;
@@ -32,12 +32,12 @@ public class Pentomino {
 			for (int i = 0; i < numberOfRotations; i++)
 				PentominoBuilder.rotate(pentID);
 			for (int i = 0; i < numberOfReflections; i++) 
-				PentominoBuilder.reflext(pentID);
+				PentominoBuilder.reflect(pentID);
 		}
 		bits = PentominoBuilder.getBasicPent(pentID);	
 	}
 
-	public Pentomino(int _pentID, bool randomized) {
+	public Pentomino(int _pentID, boolean randomized) {
 		x = RandomEngine.getInt(2, Field.getWidth() - 2);
 		y = -3;
 
@@ -49,7 +49,7 @@ public class Pentomino {
 			for (int i = 0; i < numberOfRotations; i++)
 				PentominoBuilder.rotate(pentID);
 			for (int i = 0; i < numberOfReflections; i++) 
-				PentominoBuilder.reflext(pentID);
+				PentominoBuilder.reflect(pentID);
 		}
 		bits = PentominoBuilder.getBasicPent(pentID);
 	}

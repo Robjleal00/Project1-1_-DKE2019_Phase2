@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class PentominoBuilder {
 
     //All basic pentominoes that will be rotated and inverted
-    static private int[][][] basicDatabase = {
+    private static int[][][] basicDatabase = {
             {
                 // pentomino representation X
                     {0, 0, 0, 0, 0},
@@ -106,9 +106,9 @@ public class PentominoBuilder {
             }
     };
     
-    static private ArrayList<int[][][]> advancedDatabase = new ArrayList<>();
+    private static ArrayList<int[][][]> advancedDatabase = new ArrayList<>();
     
-    static public Builder() {
+    public static void Builder() {
         for (int PentID = 0; PentID < 12; PentID++) {
             int[][][] current = new int[8][5][5];
             for (int i = 0; i < 4; i++) {
@@ -126,7 +126,7 @@ public class PentominoBuilder {
         }
     }
     
-    static private int[][][] removeDuplicates(int[][][] current) {
+    private static int[][][] removeDuplicates(int[][][] current) {
         ArrayList<int[][]> answer = new ArrayList<>();
         for (int i = 0; i < current.length; i++) {
             boolean ok = true;
@@ -143,7 +143,7 @@ public class PentominoBuilder {
         return result;
     }
     
-    static public boolean same2DMatrixes(int[][] a, int[][] b) {
+    public static boolean same2DMatrixes(int[][] a, int[][] b) {
         for (int i = 0; i < a.length; i++) {
             for (int j = 0; j < a[i].length; j++) {
                 if (a[i][j] != b[i][j]) {
@@ -154,32 +154,32 @@ public class PentominoBuilder {
         return true;
     }
     
-    static public void rotate(int PentID) {
+    public static void rotate(int PentID) {
         int[][] rotated = new int[5][5];
         
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                rotated[j][5 - 1 - i] = basicDatabase[PentID][i][j];
+                rotated[j][5 - 1 - i] = basicDatabase[PentID - 1][i][j];
             }
         }
-        basicDatabase[PentID] = rotated;
+        basicDatabase[PentID - 1] = rotated;
     }
     
-    static public void reflect(int PentID) {
+    public static void reflect(int PentID) {
         int[][] reflected = new int[5][5];
         
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++)
-                reflected[5 - 1 - i][j] = basicDatabase[PentID][i][j];
+                reflected[5 - 1 - i][j] = basicDatabase[PentID - 1][i][j];
         }
-        basicDatabase[PentID] = reflected;
+        basicDatabase[PentID - 1] = reflected;
     }
     
-    static public int[][] getBasicPent(int PentID) {
-        return basicDatabase[PentID];
+    public static int[][] getBasicPent(int PentID) {
+        return basicDatabase[PentID - 1];
     }
     
-    static public int[][][] getPent(int PentID) {
-        return advancedDatabase.get(PentID);
+    public static int[][][] getPent(int PentID) {
+        return advancedDatabase.get(PentID - 1);
     }
 }
