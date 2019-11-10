@@ -74,7 +74,7 @@ public class UI extends JPanel {
     public void setState(int[][] _state) {
         for (int i = 0; i < state.length; i++) {
             for (int j = 0; j < state[i].length; j++) {
-                state[i][j] = _state[i][j];
+                state[i][j] = _state[i][j] - 1;
             }
         }
 
