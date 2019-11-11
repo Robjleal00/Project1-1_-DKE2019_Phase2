@@ -1,3 +1,5 @@
+import javafx.util.Pair;
+
 public class Pentomino {
 	private int[][] bits;
 	private int pentID = 0;
@@ -5,73 +7,45 @@ public class Pentomino {
 	private int x, y;
 
 	public Pentomino(int _x, int _y, boolean randomized) {
-		x = _x;
-		y = _y;
-
+		if (randomized) 
+			PentominoBuilder.randomize(pentID);
 		pentID = RandomEngine.getInt(0, 12);
-		
-		if (randomized) {
-			int numberOfRotations = RandomEngine.getInt(0, 4);
-			int numberOfReflections = RandomEngine.getInt(0, 2);
-
-			for (int i = 0; i < numberOfRotations; i++)
-				PentominoBuilder.rotate(pentID);
-			for (int i = 0; i < numberOfReflections; i++) 
-				PentominoBuilder.reflect(pentID);
-		}
 
 		bits = PentominoBuilder.getBasicPent(pentID);		 
+
+		x = _x;
+		y = _y;
 	}
 
 	public Pentomino(int _x, int _y, int _pentID, boolean randomized) {
-		x = _x;
-		y = _y;
+		if (randomized) 
+			PentominoBuilder.randomize(pentID);
 		pentID = _pentID;
 
-		if (randomized) {
-			int numberOfRotations = RandomEngine.getInt(0, 4);
-			int numberOfReflections = RandomEngine.getInt(0, 2);
-
-			for (int i = 0; i < numberOfRotations; i++)
-				PentominoBuilder.rotate(pentID);
-			for (int i = 0; i < numberOfReflections; i++) 
-				PentominoBuilder.reflect(pentID);
-		}
 		bits = PentominoBuilder.getBasicPent(pentID);	
+
+		x = _x;
+		y = _y;
 	}
 
 	public Pentomino(int _pentID, boolean randomized) {
-		x = RandomEngine.getInt(2, Field.getWidth() - 2);
-		y = -3;
+		if (randomized)
+			PentominoBuilder.randomize(pentID);
+		pentID = RandomEngine.getInt(0, 12);
 
-		pentID = _pentID;
-		if (randomized) {
-			int numberOfRotations = RandomEngine.getInt(0, 4);
-			int numberOfReflections = RandomEngine.getInt(0, 2);
-
-			for (int i = 0; i < numberOfRotations; i++)
-				PentominoBuilder.rotate(pentID);
-			for (int i = 0; i < numberOfReflections; i++) 
-				PentominoBuilder.reflect(pentID);
-		}
 		bits = PentominoBuilder.getBasicPent(pentID);
+
+		setRandomCoord(pentID);
 	}
 
 	public Pentomino (boolean randomized) {
-		x = RandomEngine.getInt(2, Field.getWidth() - 2);
-		y = -3;
-
+		if (randomized) 
+			PentominoBuilder.randomize(pentID);
 		pentID = RandomEngine.getInt(0, 12);
-		if (randomized) {
-			int numberOfRotations = RandomEngine.getInt(0, 4);
-			int numberOfReflections = RandomEngine.getInt(0, 2);
 
-			for (int i = 0; i < numberOfRotations; i++)
-				PentominoBuilder.rotate(pentID);
-			for (int i = 0; i < numberOfReflections; i++) 
-				PentominoBuilder.reflect(pentID);	
-		}
 		bits = PentominoBuilder.getBasicPent(pentID);
+
+		setRandomCoord(pentID);
 	}
 
 	public int[][] getBits() {
@@ -105,6 +79,62 @@ public class Pentomino {
 	public void setY(int _y) {
 		y = _y;
 	}
+
+	public boolean allInside() {
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 5; j++) {
+				if (bits[i][j] != 0 && 0 <= y + i - 2 && y + i - 2 < Field.getHeight() && 0 <= x + j - 2 && x + j - 2 < Field.getWidth()) 
+					continue;
+				if (bits[i][j] != 0)
+					return false;
+			}
+		}
+		return true;
+	}
+
+	public void setRandomCoord(int pentID) {
+		Pair<Integer, Integer> yParam = getHeightParam();
+		Pair<Integer, Integer> xParam = getWidthParam();
+
+		int xLeft = (2 - xParam.getKey()) + 0;
+		int xRight = (2 - xParam.getValue()) + Field.getWidth();
+
+		x = RandomEngine.getInt(xLeft, xRight);
+
+		y = -1 - (yParam.getValue() - 2);  
+	}
+
+	public Pair<Integer, Integer> getHeightParam() {
+		int mn = 4, mx = 0;
+		for (int i = 0; i < 5; i++) {
+			boolean found = false;
+			for (int j = 0; j < 5; j++) 
+				if (bits[i][j] != 0)
+					found = true;
+			
+			if (found) {
+				mn = Math.min(mn, i);
+				mx = Math.max(mx, i);
+			}
+		}
+		return new Pair<>(mn, mx);
+	}
+
+	public Pair<Integer, Integer> getWidthParam() {
+		int mn = 4, mx = 0;
+		for (int j = 0; j < 5; j++) {
+			boolean found = false;
+			for (int i = 0; i < 5; i++) 
+				if (bits[i][j] != 0)
+					found = true;
+			
+			if (found) {
+				mn = Math.min(mn, j);
+				mx = Math.max(mx, j);
+			}
+		}
+		return new Pair<>(mn, mx);
+	} 
 
 	public boolean moveDown() {
 		Field.deletePentomino(x, y, this);
