@@ -9,7 +9,7 @@ public class UI extends JPanel {
     private int size;
 
     // Constructor: sets everything up
-    public UI(int x, int y, int _size) {
+    public UI(int y, int x, int _size) {
         size = _size;
         setPreferredSize(new Dimension(x * size, y * size));
 

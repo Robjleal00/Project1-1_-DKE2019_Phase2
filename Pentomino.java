@@ -85,4 +85,37 @@ public class Pentomino {
 	public void setY(int _y) {
 		y = _y;
 	}
+
+	public boolean moveDown() {
+		Field.deletePentomino(x, y, this);
+
+		y++;
+		if (!Field.addPentomino(x, y, this)) {
+			y--;
+			return false;
+		}
+		return true;
+	}
+
+	public boolean moveLeft() {
+		Field.deletePentomino(x, y, this);
+
+		x--;
+		if (!Field.addPentomino(x, y, this)) {
+			x++;
+			return false;
+		}
+		return true;
+	}
+
+	public boolean moveRight() {
+		Field.deletePentomino(x, y, this);
+
+		x++;
+		if (!Field.addPentomino(x, y, this)) {
+			x--;
+			return false;
+		}
+		return true;
+	}
 }
