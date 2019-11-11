@@ -9,7 +9,7 @@ public class Game {
 		Pentomino currentObj = new Pentomino(true);
 		while (true) {
 			try {
-			    Thread.sleep(100);
+			    Thread.sleep(200);
 			}
 			catch(InterruptedException ex) {
 			    Thread.currentThread().interrupt();
@@ -19,7 +19,7 @@ public class Game {
 			if (result)
 				ui.setState(Field.getUsed());
 			else {
-				if (currentObj.getY() == -3) 
+				if (!currentObj.allInside()) 
 					break;
 				else
 					currentObj = new Pentomino(true);

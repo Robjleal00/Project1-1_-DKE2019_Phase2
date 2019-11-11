@@ -153,33 +153,43 @@ public class PentominoBuilder {
         }
         return true;
     }
+
+    public static void randomize(int pentID) {
+        int numberOfRotations = RandomEngine.getInt(0, 4);
+        int numberOfReflections = RandomEngine.getInt(0, 2);
+
+        for (int i = 0; i < numberOfRotations; i++)
+            rotate(pentID);
+        for (int i = 0; i < numberOfReflections; i++) 
+            reflect(pentID);
+    }
     
-    public static void rotate(int PentID) {
+    public static void rotate(int pentID) {
         int[][] rotated = new int[5][5];
         
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                rotated[j][5 - 1 - i] = basicDatabase[PentID][i][j];
+                rotated[j][5 - 1 - i] = basicDatabase[pentID][i][j];
             }
         }
-        basicDatabase[PentID] = rotated;
+        basicDatabase[pentID] = rotated;
     }
     
-    public static void reflect(int PentID) {
+    public static void reflect(int pentID) {
         int[][] reflected = new int[5][5];
         
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++)
-                reflected[5 - 1 - i][j] = basicDatabase[PentID][i][j];
+                reflected[5 - 1 - i][j] = basicDatabase[pentID][i][j];
         }
-        basicDatabase[PentID] = reflected;
+        basicDatabase[pentID] = reflected;
     }
     
-    public static int[][] getBasicPent(int PentID) {
-        return basicDatabase[PentID];
+    public static int[][] getBasicPent(int pentID) {
+        return basicDatabase[pentID];
     }
     
-    public static int[][][] getPent(int PentID) {
-        return advancedDatabase.get(PentID);
+    public static int[][][] getPent(int pentID) {
+        return advancedDatabase.get(pentID);
     }
 }

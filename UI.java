@@ -84,8 +84,8 @@ public class UI extends JPanel {
             }
             System.out.println();
         }
-        System.out.println();
-        */
+        System.out.println();*/
+
         // Tells the system a frame update is required
         repaint();
     }
