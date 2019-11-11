@@ -4,18 +4,21 @@ public class Pentomino {
 
 	private int x, y;
 
-	public Pentomino(int _x, int _y) {
+	public Pentomino(int _x, int _y, boolean randomized) {
 		x = _x;
 		y = _y;
 
 		pentID = RandomEngine.getInt(0, 12);
-		int numberOfRotations = RandomEngine.getInt(0, 4);
-		int numberOfReflections = RandomEngine.getInt(0, 2);
+		
+		if (randomized) {
+			int numberOfRotations = RandomEngine.getInt(0, 4);
+			int numberOfReflections = RandomEngine.getInt(0, 2);
 
-		for (int i = 0; i < numberOfRotations; i++)
-			PentominoBuilder.rotate(pentID);
-		for (int i = 0; i < numberOfReflections; i++) 
-			PentominoBuilder.reflect(pentID);
+			for (int i = 0; i < numberOfRotations; i++)
+				PentominoBuilder.rotate(pentID);
+			for (int i = 0; i < numberOfReflections; i++) 
+				PentominoBuilder.reflect(pentID);
+		}
 
 		bits = PentominoBuilder.getBasicPent(pentID);		 
 	}
@@ -50,6 +53,23 @@ public class Pentomino {
 				PentominoBuilder.rotate(pentID);
 			for (int i = 0; i < numberOfReflections; i++) 
 				PentominoBuilder.reflect(pentID);
+		}
+		bits = PentominoBuilder.getBasicPent(pentID);
+	}
+
+	public Pentomino (boolean randomized) {
+		x = RandomEngine.getInt(2, Field.getWidth() - 2);
+		y = -3;
+
+		pentID = RandomEngine.getInt(0, 12);
+		if (randomized) {
+			int numberOfRotations = RandomEngine.getInt(0, 4);
+			int numberOfReflections = RandomEngine.getInt(0, 2);
+
+			for (int i = 0; i < numberOfRotations; i++)
+				PentominoBuilder.rotate(pentID);
+			for (int i = 0; i < numberOfReflections; i++) 
+				PentominoBuilder.reflect(pentID);	
 		}
 		bits = PentominoBuilder.getBasicPent(pentID);
 	}
@@ -92,6 +112,7 @@ public class Pentomino {
 		y++;
 		if (!Field.addPentomino(x, y, this)) {
 			y--;
+			Field.addPentomino(x, y, this);
 			return false;
 		}
 		return true;
@@ -103,6 +124,7 @@ public class Pentomino {
 		x--;
 		if (!Field.addPentomino(x, y, this)) {
 			x++;
+			Field.addPentomino(x, y, this);
 			return false;
 		}
 		return true;
@@ -114,6 +136,7 @@ public class Pentomino {
 		x++;
 		if (!Field.addPentomino(x, y, this)) {
 			x--;
+			Field.addPentomino(x, y, this);
 			return false;
 		}
 		return true;

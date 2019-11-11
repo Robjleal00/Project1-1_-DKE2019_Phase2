@@ -159,10 +159,10 @@ public class PentominoBuilder {
         
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                rotated[j][5 - 1 - i] = basicDatabase[PentID - 1][i][j];
+                rotated[j][5 - 1 - i] = basicDatabase[PentID][i][j];
             }
         }
-        basicDatabase[PentID - 1] = rotated;
+        basicDatabase[PentID] = rotated;
     }
     
     public static void reflect(int PentID) {
@@ -170,16 +170,16 @@ public class PentominoBuilder {
         
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++)
-                reflected[5 - 1 - i][j] = basicDatabase[PentID - 1][i][j];
+                reflected[5 - 1 - i][j] = basicDatabase[PentID][i][j];
         }
-        basicDatabase[PentID - 1] = reflected;
+        basicDatabase[PentID] = reflected;
     }
     
     public static int[][] getBasicPent(int PentID) {
-        return basicDatabase[PentID - 1];
+        return basicDatabase[PentID];
     }
     
     public static int[][][] getPent(int PentID) {
-        return advancedDatabase.get(PentID - 1);
+        return advancedDatabase.get(PentID);
     }
 }

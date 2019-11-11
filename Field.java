@@ -4,6 +4,13 @@ public class Field {
 
 	private static int[][] used;
 
+	public static void init() {
+		used = new int[HEIGHT][WIDTH];
+		for (int i = 0; i < HEIGHT; i++) 
+			for (int j = 0; j < WIDTH; j++) 
+				used[i][j] = -1;
+	}
+
 	public static boolean addPentomino(int x, int y, Pentomino obj) {
 		int[][] bits = obj.getBits();
 		int pentID = obj.getPentID();
@@ -12,7 +19,7 @@ public class Field {
 			for (int j = 0; j < 5; j++) {
 				if (!inRange(y + i - 2, x + j - 2) && bits[i][j] != 0)
 					return false;
-				if (inRange(y + i - 2, x + j - 2) && bits[i][j] != 0 && used[y + i - 2][x + j - 2] != 0)
+				if (inRange(y + i - 2, x + j - 2) && y + i - 2 >= 0 && bits[i][j] != 0 && used[y + i - 2][x + j - 2] != -1)
 					return false;
 			}
 		}
@@ -20,7 +27,7 @@ public class Field {
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
 				if (inRange(y + i - 2, x + j - 2) && y + i - 2 >= 0 && bits[i][j] != 0)
-					used[y = i - 2][x + j - 2] = pentID;
+					used[y + i - 2][x + j - 2] = pentID;
 			}
 		}
 		return true;
@@ -31,8 +38,8 @@ public class Field {
 		
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
-				if (inRange(y + i - 2, x + j - 2) && bits[i][j] != 0)	
-					used[y + i - 2][x + j - 2] = 0;
+				if (inRange(y + i - 2, x + j - 2) && y + i - 2 >= 0 && bits[i][j] != 0)	
+					used[y + i - 2][x + j - 2] = -1;
 			}
 		}
 	}

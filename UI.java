@@ -74,10 +74,18 @@ public class UI extends JPanel {
     public void setState(int[][] _state) {
         for (int i = 0; i < state.length; i++) {
             for (int j = 0; j < state[i].length; j++) {
-                state[i][j] = _state[i][j] - 1;
+                state[i][j] = _state[j][i];
             }
         }
 
+        /*for (int i = 0; i < _state.length; i++) {
+            for (int j = 0; j < _state[i].length; j++) {
+                System.out.print(_state[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+        */
         // Tells the system a frame update is required
         repaint();
     }
