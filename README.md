@@ -4,7 +4,7 @@ This is the repository of the proup 10, project 1-2 Maatricht University DKE 201
 
 Andrea Fracassi
 
-Nick Grassetto
+Nico Grassetto
 
 Robert Leal
 
