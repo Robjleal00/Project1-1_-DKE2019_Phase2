@@ -4,6 +4,8 @@ public class Field {
 
 	private static int[][] used;
 
+	private static int score = 0;
+
 	public static void init() {
 		used = new int[HEIGHT][WIDTH];
 		for (int i = 0; i < HEIGHT; i++) 
@@ -42,6 +44,37 @@ public class Field {
 					used[y + i - 2][x + j - 2] = -1;
 			}
 		}
+	}
+
+	public static void updateScore() {
+		int current = 0, id = HEIGHT - 1;
+		for (int i = HEIGHT - 1; i >= 0; i--) {
+			boolean line = true;
+			for (int j = 0; j < WIDTH; j++)
+				if (used[i][j] == -1)
+					line = false;
+
+			if (!line) {
+				if (current == 4)
+					score += 800;
+				else
+					score += 100 * current;
+				current = 0;
+				for (int j = 0; j < WIDTH; j++)
+					used[id][j] = used[i][j]; 
+				id--;
+			}
+			else
+				current++;
+		}	
+		if (current == 4)
+			score += 800;
+		else
+			score += 100 * current;
+	}
+
+	public static int getScore() {
+		return score;
 	}
 
 	public static boolean inRange(int y, int x) {

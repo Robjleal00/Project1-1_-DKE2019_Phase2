@@ -21,12 +21,15 @@ public class Game {
 			else {
 				if (!currentObj.allInside()) 
 					break;
-				else
+				else {
+					Field.updateScore();
 					currentObj = new Pentomino(true);
+				}
 			}
 		}
 
 		System.out.println("Game over");
+		System.out.println("Your score is " + Field.getScore());
 
 		try {
 		    Thread.sleep(1000);
