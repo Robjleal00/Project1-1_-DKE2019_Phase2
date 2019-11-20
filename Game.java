@@ -1,9 +1,8 @@
 public class Game {
-	public static final int DEFAULT_CELL = 50;
 	public static UI ui;
 
 	public static void main(String[] args) {
-		ui = new UI(Field.getHeight(), Field.getWidth(), DEFAULT_CELL);
+		ui = new UI(Field.getHeight(), Field.getWidth(), Field.getCellSize());
 		Field.init();
 
 		Pentomino currentObj = new Pentomino(true);
@@ -21,12 +20,15 @@ public class Game {
 			else {
 				if (!currentObj.allInside()) 
 					break;
-				else
+				else {
+					Field.updateScore();
 					currentObj = new Pentomino(true);
+				}
 			}
 		}
 
 		System.out.println("Game over");
+		System.out.println("Your score is " + Field.getScore());
 
 		try {
 		    Thread.sleep(1000);
