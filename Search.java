@@ -2,67 +2,31 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class Search {
-	
-    public int NUMBER_OF_ROWS = 6;                  
-    public int NUMBER_OF_COLS = 5;                    
-    public final int DEFAULT_CELL_SIZE = 50;                
-    public final int PENT_SIZE = 5;
-    public final int LOC_CENT_X = 2;
-    public final int LOC_CENT_Y = 2;
     public char[] INPUT = {'T', 'W', 'Z', 'L', 'I', 'Y'};    // sample INPUT
     public boolean ANIMATED = true;
     
-    public PentominoBuilder database = new PentominoBuilder();
     public UI ui;
     
-    public boolean[][] used;
-    
-    public int[][] field;
-    public int[] mask;
-    
-    // Helper function which starts the brute force algorithm
+    public int maxScore = 0;
+
     public Search(int height, int width, boolean ani, char[] inp) {
-        NUMBER_OF_ROWS = height;
-        NUMBER_OF_COLS = width;
         ANIMATED = ani;
         
-        if (NUMBER_OF_ROWS * NUMBER_OF_COLS != inp.length * 5) {
-        	System.out.println("No solution");
-        	System.out.println("Finished");
-        	return;
-        }
-        
-        used = new boolean[NUMBER_OF_ROWS][NUMBER_OF_COLS];
-    	
         if (ANIMATED)
-        	ui = new UI(NUMBER_OF_ROWS, NUMBER_OF_COLS, DEFAULT_CELL_SIZE);
+        	ui = new UI(Field.getHeight(), Field.getWidth(), Field.getCellSize());
         
-    	field = new int[height][width];
-    	for(int i = 0; i < NUMBER_OF_ROWS; i++) {
-            for(int j = 0; j < NUMBER_OF_COLS; j++) {
-                // -1 in the state matrix corresponds to empty square
-                // Any positive number identifies the ID of the pentomino
-                field[i][j] = -1;
-            }
-        }
-    	mask = new int[inp.length];
-        for (int i = 0; i < inp.length; i++) {
-        	mask[i] = 1;
-        }
-    	
     	INPUT = inp;
     	
-        boolean result = backtracking();
+    	Field.init();
+    	PentominoBuilder.init();
+
+        backtracking(0);
        
-        if (!result) {
-        	System.out.println("No solution");
-        } else {
-        	if (!ANIMATED)
-        		ui = new UI(NUMBER_OF_ROWS, NUMBER_OF_COLS, DEFAULT_CELL_SIZE);
+    	if (!ANIMATED)
+        	ui = new UI(Field.getHeight(), Field.getWidth(), Field.getCellSize());
      
-        	ui.setState(field);
-        	System.out.println("Solution found");
-        }
+    	ui.setState(Field.getUsed());
+    	System.out.println("Maximum score found is " + maxScore);
         System.out.println("Finished");
     }
    
@@ -95,138 +59,55 @@ public class Search {
         }
         return pentID;
     }
-   
-    public void goBack(int pentID) {
-        for (int i = 0; i < NUMBER_OF_ROWS; i++) {
-            for (int j = 0; j < NUMBER_OF_COLS; j++) {
-                if (field[i][j] == pentID) {
-                    field[i][j] = -1;
-                }
-            }
-        }
-    }
     
-    public boolean tryToPush(int[][] locField, int pentID, int glCentX, int glCentY) {
-    	for (int locY = 0; locY < PENT_SIZE; locY++) {
-    		for (int locX = 0; locX < PENT_SIZE; locX++) {
-    			if (locField[locY][locX] == 0)	
-    				continue;
-    			
-    			int globalY = (locY - LOC_CENT_Y) + glCentY;
-    			int globalX = (locX - LOC_CENT_X) + glCentX;
-    			
-    			if (!(0 <= globalY && globalY < NUMBER_OF_ROWS))
-    				return false;
-    			if (!(0 <= globalX && globalX < NUMBER_OF_COLS))
-    				return false;
-    			if (field[globalY][globalX] != -1)
-    				return false;
-    			
-    			field[globalY][globalX] = pentID;
-    		}
-    	}
-    	return true;
-    }
-    
-    public int dfs(int i, int j) {
-    	used[i][j] = true;
-    	int sum = 1;
-    	if (i != 0)
-    		if (!used[i - 1][j])
-    			sum += dfs(i - 1, j);
-    	if (i != NUMBER_OF_ROWS - 1)
-    		if (!used[i + 1][j])
-    			sum += dfs(i + 1, j);
-    	if (j != 0)
-    		if (!used[i][j - 1])
-    			sum += dfs(i, j - 1);
-    	if (j != NUMBER_OF_COLS - 1)
-    		if (!used[i][j + 1])
-    			sum += dfs(i, j + 1);
-    	return sum;
-    }
-    
-    public boolean isValid() {
-    	for (int i = 0; i < NUMBER_OF_ROWS; i++) {
-    		for (int j = 0; j < NUMBER_OF_COLS; j++) {
-    			used[i][j] = !(field[i][j] == -1);
-    		}
-    	}
-    	
-    	for (int i = 0; i < NUMBER_OF_ROWS; i++) {
-    		for (int j = 0; j < NUMBER_OF_COLS; j++) {
-    			if (!used[i][j]) {
-    				int sum = dfs(i, j);
-    				if (sum % 5 != 0)
-    					return false;
-    			}
-    		}
-    	}
-    	return true;
-    }
-    
-    public boolean backtracking() {   
+  	public void backtracking(int inpID) {   
     	//System.out.println(x + "  " + y);
         
-    	if (!isValid()) {
-        	return false;
-        }
-    	
-    	if (ANIMATED) {
-	    	ui.setState(field);
+  		if (ANIMATED) {
+	    	ui.setState(Field.getUsed());
 	        try {
-			    Thread.sleep(1);
+			    Thread.sleep(100);
 			}
 			catch(InterruptedException ex) {
 			    Thread.currentThread().interrupt();
 			}
     	}
+
+    	maxScore = Math.max(maxScore, Field.getScore());
+
+    	if (inpID == INPUT.length)
+    		return;
+
+    	int pentID = characterToID(INPUT[inpID]);
     	
-        boolean ok = true;
-    	for (int i = 0; i < INPUT.length; i++)
-    		if (mask[i] == 1)
-    			ok = false;
-    	if (ok)
-    		return true;
-    	
-    	int currentY = -1, currentX = -1;
-    	for (int i = 0; i < NUMBER_OF_ROWS && currentY == -1; i++) {
-    		for (int j = 0; j < NUMBER_OF_COLS && currentX == -1; j++) { 
-    			if (field[i][j] == -1) {
-    				currentY = i;
-    				currentX = j;
+    	for (int y = 0; y < Field.getHeight(); y++) {
+    		for (int x = 0; x < Field.getWidth(); x++) {
+    			boolean base_exists = false;
+
+    			for (int y1 = y + 1; y1 <= y + 3 && !base_exists; y1++) {
+    				for (int x1 = x - 2; x1 <= x + 2 && !base_exists; x1++) {
+    					if (x1 < 0 || x1 >= Field.getWidth()) 
+    						base_exists = true;
+    					else if (y1 >= Field.getHeight())
+    						base_exists = true;
+    					else if (Field.getCell(y, x) != -1) 
+    						base_exists = true;
+    				}
     			}
+
+    			if (!base_exists)
+    				continue; 
+				for (int i = 0; i < PentominoBuilder.getNumberOfPentRotations(pentID); i++) {
+					Pentomino obj = new Pentomino(x, y, pentID, i);
+					boolean result = Field.addPentomino(obj);
+					Field.updateScore();
+
+					if (result)
+						backtracking(inpID + 1);
+
+					Field.deletePentomino(obj);
+				}
     		}
     	}
-    	
-    	for (int x = currentX; x < Math.min(NUMBER_OF_COLS, currentX + 5); x++) {
-    		for (int y = currentY; y < Math.min(NUMBER_OF_ROWS, currentY + 5); y++) {
-    			if (field[y][x] == -1) {
-    	        	for (int i = 0; i < INPUT.length; i++) {
-    		            if (mask[i] == 0) {
-    		                continue;
-    		            }
-    		           
-    		            int pentID = characterToID(INPUT[i]);
-    		            
-    		            int[][][] current = database.getPent(pentID);
-    		            for (int j = 0; j < current.length; j++) {
-    		            	boolean result = tryToPush(current[j], pentID, x, y);
-    		            	if (result) {
-    		            		mask[i] = 0;
-    		            		boolean successfully = backtracking();
-    		            		if (successfully) {
-    		            			return true;
-    		            		}
-    		            	}
-    		            	goBack(pentID);
-    		            	mask[i] = 1;
-    		            }
-    		        }
-    	    	}
-    		}
-    	}
-    	
-        return false;
     }
 }

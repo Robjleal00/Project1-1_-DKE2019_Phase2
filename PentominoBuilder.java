@@ -108,7 +108,7 @@ public class PentominoBuilder {
     
     private static ArrayList<int[][][]> advancedDatabase = new ArrayList<>();
     
-    public static void Builder() {
+    public static void init() {
         for (int PentID = 0; PentID < 12; PentID++) {
             int[][][] current = new int[8][5][5];
             for (int i = 0; i < 4; i++) {
@@ -189,7 +189,11 @@ public class PentominoBuilder {
         return basicDatabase[pentID];
     }
     
-    public static int[][][] getPent(int pentID) {
-        return advancedDatabase.get(pentID);
+    public static int getNumberOfPentRotations(int pentID) {
+        return (advancedDatabase.get(pentID)).length;
+    }
+
+    public static int[][] getPent(int pentID, int _id) {
+        return (advancedDatabase.get(pentID))[_id];
     }
 }

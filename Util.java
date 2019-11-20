@@ -8,7 +8,7 @@ public class Util {
 	public static Image scaledImage(String path, int y) throws IOException {
 		
 		BufferedImage img = null;
-		img = ImageIO.read(ClassLoader.getSystemResource("background.jpg"));
+		img = ImageIO.read(ClassLoader.getSystemResource("res/background.jpg"));
 		double ratio = (double)img.getWidth()/(double)img.getHeight();
 		Image scaledImage = img.getScaledInstance((int) (y*ratio),y , Image.SCALE_SMOOTH);
 		return scaledImage;

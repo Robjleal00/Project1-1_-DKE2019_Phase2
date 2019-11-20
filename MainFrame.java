@@ -140,7 +140,7 @@ public class MainFrame {
 		});
 		p.add(btnQuit);
 		
-		JLabel background = new JLabel(new ImageIcon(Util.scaledImage("background.jpg", (frame.getHeight()))));
+		JLabel background = new JLabel(new ImageIcon(Util.scaledImage("res/background.jpg", (frame.getHeight()))));
 		background.setBounds(0, 0, frame.getWidth(), frame.getHeight());//Update every time. 0,0,frame.getWidth(), frame.getHeight()
 		p.add(background);
 	}

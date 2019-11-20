@@ -28,6 +28,15 @@ public class Pentomino {
 		y = _y;
 	}
 
+	public Pentomino(int _x, int _y, int _pentID, int _id) {
+		pentID = _pentID;
+
+		bits = PentominoBuilder.getPent(pentID, _id);
+
+		x = _x;
+		y = _y;
+	}
+
 	public Pentomino(int _pentID, boolean randomized) {
 		if (randomized)
 			PentominoBuilder.randomize(pentID);
