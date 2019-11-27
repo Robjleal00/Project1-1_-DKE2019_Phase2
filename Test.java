@@ -3,8 +3,6 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-
-
 public class Test {
 	public static void main(String[]args) throws FileNotFoundException {
 		File file = new File("scores.txt");

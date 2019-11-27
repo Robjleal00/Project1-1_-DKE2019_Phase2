@@ -40,7 +40,6 @@ public class ActionListener extends UI {
         box2.addActionListener(Button);
         box3.addActionListener(Button);
         passwordField.addActionListener(Button);
-
     }
 
     private class FieldButton implements ActionListener {

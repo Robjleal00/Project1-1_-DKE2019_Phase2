@@ -145,37 +145,49 @@ public class Pentomino {
 		return new Pair<>(mn, mx);
 	} 
 
+	public void rotateLeft() {
+
+	}
+
+	public void rotateRight() {
+
+	}
+
+	public void reflect() {
+		
+	}
+
 	public boolean moveDown() {
-		Field.deletePentomino(x, y, this);
+		Field.deletePentomino(this);
 
 		y++;
-		if (!Field.addPentomino(x, y, this)) {
+		if (!Field.addPentomino(this)) {
 			y--;
-			Field.addPentomino(x, y, this);
+			Field.addPentomino(this);
 			return false;
 		}
 		return true;
 	}
 
 	public boolean moveLeft() {
-		Field.deletePentomino(x, y, this);
+		Field.deletePentomino(this);
 
 		x--;
-		if (!Field.addPentomino(x, y, this)) {
+		if (!Field.addPentomino(this)) {
 			x++;
-			Field.addPentomino(x, y, this);
+			Field.addPentomino(this);
 			return false;
 		}
 		return true;
 	}
 
 	public boolean moveRight() {
-		Field.deletePentomino(x, y, this);
+		Field.deletePentomino(this);
 
 		x++;
-		if (!Field.addPentomino(x, y, this)) {
+		if (!Field.addPentomino(this)) {
 			x--;
-			Field.addPentomino(x, y, this);
+			Field.addPentomino(this);
 			return false;
 		}
 		return true;

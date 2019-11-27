@@ -1,7 +1,7 @@
 public class Field {
-	private static final int HEIGHT = 15;
+	private static final int HEIGHT = 40;
 	private static final int WIDTH = 5;
-	private static final int DEFUALT_CELL_SIZE = 50;
+	private static final int DEFUALT_CELL_SIZE = 20;
 
 	private static int[][] used;
 
@@ -47,7 +47,7 @@ public class Field {
 		
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
-				if (inRange(y + i - 2, x + j - 2) && y + i - 2 >= 0 && used[y + i - 2][x + j - 2] == obj.getPentID())	
+				if (inRange(y + i - 2, x + j - 2) && y + i - 2 >= 0 && used[y + i - 2][x + j - 2] == obj.getPentID() && bits[i][j] != 0)	
 					used[y + i - 2][x + j - 2] = -1;
 			}
 		}
