@@ -3,26 +3,46 @@ import javafx.util.Pair;
 public class Pentomino {
 	private int[][] bits;
 	private int pentID = 0;
+	private int rotation = 0;
+	private int length = 0;
 
 	private int x, y;
 
-	public Pentomino(int _x, int _y, boolean randomized) {
-		if (randomized) 
-			PentominoBuilder.randomize(pentID);
+	public Pentomino() {
 		pentID = RandomEngine.getInt(0, 12);
 
-		bits = PentominoBuilder.getBasicPent(pentID);		 
+		bits = PentominoBuilder.getPent(pentID, rotation);
+		length = bits.length;
+
+		x = Field.getWidth() / 2 - length / 2;
+		y = -length;
+	}
+
+	public Pentomino(int _pentID) {
+		pentID = _pentID;
+
+		bits = PentominoBuilder.getPent(pentID, rotation);
+		length = bits.length;
+
+		x = Field.getWidth() / 2 - length / 2;
+		y = -length;	
+	}
+
+	public Pentomino(int _x, int _y) {
+		pentID = RandomEngine.getInt(0, 12);
+		
+		bits = PentominoBuilder.getPent(pentID, rotation);		 
+		length = bits.length;
 
 		x = _x;
 		y = _y;
 	}
 
-	public Pentomino(int _x, int _y, int _pentID, boolean randomized) {
-		if (randomized) 
-			PentominoBuilder.randomize(pentID);
+	public Pentomino(int _x, int _y, int _pentID) {
 		pentID = _pentID;
 
-		bits = PentominoBuilder.getBasicPent(pentID);	
+		bits = PentominoBuilder.getPent(pentID, rotation);	
+		length = bits.length;
 
 		x = _x;
 		y = _y;
@@ -30,31 +50,13 @@ public class Pentomino {
 
 	public Pentomino(int _x, int _y, int _pentID, int _id) {
 		pentID = _pentID;
+		rotation = _id;
 
-		bits = PentominoBuilder.getPent(pentID, _id);
+		bits = PentominoBuilder.getPent(pentID, rotation);
+		length = bits.length;
 
 		x = _x;
 		y = _y;
-	}
-
-	public Pentomino(int _pentID, boolean randomized) {
-		if (randomized)
-			PentominoBuilder.randomize(pentID);
-		pentID = RandomEngine.getInt(0, 12);
-
-		bits = PentominoBuilder.getBasicPent(pentID);
-
-		setRandomCoord(pentID);
-	}
-
-	public Pentomino (boolean randomized) {
-		if (randomized) 
-			PentominoBuilder.randomize(pentID);
-		pentID = RandomEngine.getInt(0, 12);
-
-		bits = PentominoBuilder.getBasicPent(pentID);
-
-		setRandomCoord(pentID);
 	}
 
 	public int[][] getBits() {
@@ -63,6 +65,11 @@ public class Pentomino {
 
 	public void setBits(int[][] _bits) {
 		bits = _bits;
+		length = bits.length;
+	}
+
+	public int getLength() {
+		return length;
 	}
 
 	public int getPentID() {
@@ -90,9 +97,9 @@ public class Pentomino {
 	}
 
 	public boolean allInside() {
-		for (int i = 0; i < 5; i++) {
-			for (int j = 0; j < 5; j++) {
-				if (bits[i][j] != 0 && 0 <= y + i - 2 && y + i - 2 < Field.getHeight() && 0 <= x + j - 2 && x + j - 2 < Field.getWidth()) 
+		for (int i = 0; i < length; i++) {
+			for (int j = 0; j < length; j++) {
+				if (bits[i][j] != 0 && 0 <= y + i && y + i < Field.getHeight() && 0 <= x + j && x + j < Field.getWidth()) 
 					continue;
 				if (bits[i][j] != 0)
 					return false;
@@ -101,60 +108,80 @@ public class Pentomino {
 		return true;
 	}
 
-	public void setRandomCoord(int pentID) {
-		Pair<Integer, Integer> yParam = getHeightParam();
-		Pair<Integer, Integer> xParam = getWidthParam();
+	public boolean rotateLeft() {
+		Field.deletePentomino(this);
 
-		int xLeft = (2 - xParam.getKey()) + 0;
-		int xRight = (2 - xParam.getValue()) + Field.getWidth();
+		if (tryLeft(0, 0))
+			return true;
+		if (tryLeft(-1, 0))
+			return true;
+		if (tryLeft(-2, 0))
+			return true;
+		if (tryLeft(1, 0))
+			return true;
+		if (tryLeft(2, 0))
+			return true;
+		if (tryLeft(0, 1))
+			return true;
 
-		x = RandomEngine.getInt(xLeft, xRight);
-
-		y = -1 - (yParam.getValue() - 2);  
+		Field.addPentomino(this);
+		return false;
 	}
 
-	public Pair<Integer, Integer> getHeightParam() {
-		int mn = 4, mx = 0;
-		for (int i = 0; i < 5; i++) {
-			boolean found = false;
-			for (int j = 0; j < 5; j++) 
-				if (bits[i][j] != 0)
-					found = true;
-			
-			if (found) {
-				mn = Math.min(mn, i);
-				mx = Math.max(mx, i);
-			}
+	public boolean tryLeft(int dx, int dy) {
+		x += dx;
+		y += dy;
+
+		rotation--;
+		rotation += PentominoBuilder.getNumberOfRotations(pentID);
+		rotation %= PentominoBuilder.getNumberOfRotations(pentID);
+		bits = PentominoBuilder.getPent(pentID, rotation);
+
+		if (!Field.addPentomino(this)) {
+			rotation++;
+			rotation %= PentominoBuilder.getNumberOfRotations(pentID);
+			bits = PentominoBuilder.getPent(pentID, rotation);			
+			return false;
 		}
-		return new Pair<>(mn, mx);
+		return true;
 	}
 
-	public Pair<Integer, Integer> getWidthParam() {
-		int mn = 4, mx = 0;
-		for (int j = 0; j < 5; j++) {
-			boolean found = false;
-			for (int i = 0; i < 5; i++) 
-				if (bits[i][j] != 0)
-					found = true;
-			
-			if (found) {
-				mn = Math.min(mn, j);
-				mx = Math.max(mx, j);
-			}
+	public boolean rotateRight() {
+		Field.deletePentomino(this);
+
+		if (tryLeft(0, 0))
+			return true;
+		if (tryLeft(1, 0))
+			return true;
+		if (tryLeft(2, 0))
+			return true;
+		if (tryLeft(-1, 0))
+			return true;
+		if (tryLeft(-2, 0))
+			return true;
+		if (tryLeft(0, 1))
+			return true;
+
+		Field.addPentomino(this);
+		return false;	
+	}
+
+	public boolean tryRight(int dx, int dy) {
+		x += dx;
+		y += dy;
+
+		rotation++;
+		rotation %= PentominoBuilder.getNumberOfRotations(pentID);
+		bits = PentominoBuilder.getPent(pentID, rotation);
+
+		if (!Field.addPentomino(this)) {
+			rotation--;
+			rotation += PentominoBuilder.getNumberOfRotations(pentID);
+			rotation %= PentominoBuilder.getNumberOfRotations(pentID);
+			bits = PentominoBuilder.getPent(pentID, rotation);			
+			return false;
 		}
-		return new Pair<>(mn, mx);
-	} 
-
-	public void rotateLeft() {
-
-	}
-
-	public void rotateRight() {
-
-	}
-
-	public void reflect() {
-		
+		return true;
 	}
 
 	public boolean moveDown() {
@@ -191,5 +218,9 @@ public class Pentomino {
 			return false;
 		}
 		return true;
+	}
+
+	public void drop() {
+		while (moveDown());
 	}
 }

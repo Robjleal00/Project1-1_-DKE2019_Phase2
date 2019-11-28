@@ -1,5 +1,5 @@
 public class Field {
-	private static final int HEIGHT = 40;
+	private static final int HEIGHT = 30;
 	private static final int WIDTH = 5;
 	private static final int DEFUALT_CELL_SIZE = 20;
 
@@ -21,19 +21,19 @@ public class Field {
 		int x = obj.getX();
 		int y = obj.getY();
 
-		for (int i = 0; i < 5; i++) {
-			for (int j = 0; j < 5; j++) {
-				if (!inRange(y + i - 2, x + j - 2) && bits[i][j] != 0)
+		for (int i = 0; i < obj.getLength(); i++) {
+			for (int j = 0; j < obj.getLength(); j++) {
+				if (!inRange(y + i, x + j) && bits[i][j] != 0)
 					return false;
-				if (inRange(y + i - 2, x + j - 2) && y + i - 2 >= 0 && bits[i][j] != 0 && used[y + i - 2][x + j - 2] != -1)
+				if (inRange(y + i, x + j) && y + i >= 0 && bits[i][j] != 0 && used[y + i][x + j] != -1)
 					return false;
 			}
 		}
 
-		for (int i = 0; i < 5; i++) {
-			for (int j = 0; j < 5; j++) {
-				if (inRange(y + i - 2, x + j - 2) && y + i - 2 >= 0 && bits[i][j] != 0)
-					used[y + i - 2][x + j - 2] = pentID;
+		for (int i = 0; i < obj.getLength(); i++) {
+			for (int j = 0; j < obj.getLength(); j++) {
+				if (inRange(y + i, x + j) && y + i >= 0 && bits[i][j] != 0)
+					used[y + i][x + j] = pentID;
 			}
 		}
 		return true;
@@ -45,10 +45,10 @@ public class Field {
 		int x = obj.getX();
 		int y = obj.getY();
 		
-		for (int i = 0; i < 5; i++) {
-			for (int j = 0; j < 5; j++) {
-				if (inRange(y + i - 2, x + j - 2) && y + i - 2 >= 0 && used[y + i - 2][x + j - 2] == obj.getPentID() && bits[i][j] != 0)	
-					used[y + i - 2][x + j - 2] = -1;
+		for (int i = 0; i < obj.getLength(); i++) {
+			for (int j = 0; j < obj.getLength(); j++) {
+				if (inRange(y + i, x + j) && y + i >= 0 && used[y + i][x + j] == obj.getPentID() && bits[i][j] != 0)	
+					used[y + i][x + j] = -1;
 			}
 		}
 	}
