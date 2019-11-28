@@ -12,6 +12,10 @@ Carel Merwe van der
 
 Ivan Poliakov
 
+@Bugs detected
+
+fixed: some of "dense" wall kicks dont work
+
 @TODO
 
 reflections if needed

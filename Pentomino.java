@@ -138,6 +138,9 @@ public class Pentomino {
 		bits = PentominoBuilder.getPent(pentID, rotation);
 
 		if (!Field.addPentomino(this)) {
+			x -= dx;
+			y -= dy;
+
 			rotation++;
 			rotation %= PentominoBuilder.getNumberOfRotations(pentID);
 			bits = PentominoBuilder.getPent(pentID, rotation);			
@@ -149,17 +152,17 @@ public class Pentomino {
 	public boolean rotateRight() {
 		Field.deletePentomino(this);
 
-		if (tryLeft(0, 0))
+		if (tryRight(0, 0))
 			return true;
-		if (tryLeft(1, 0))
+		if (tryRight(1, 0))
 			return true;
-		if (tryLeft(2, 0))
+		if (tryRight(2, 0))
 			return true;
-		if (tryLeft(-1, 0))
+		if (tryRight(-1, 0))
 			return true;
-		if (tryLeft(-2, 0))
+		if (tryRight(-2, 0))
 			return true;
-		if (tryLeft(0, 1))
+		if (tryRight(0, 1))
 			return true;
 
 		Field.addPentomino(this);
@@ -175,6 +178,9 @@ public class Pentomino {
 		bits = PentominoBuilder.getPent(pentID, rotation);
 
 		if (!Field.addPentomino(this)) {
+			x -= dx;
+			y -= dy;
+
 			rotation--;
 			rotation += PentominoBuilder.getNumberOfRotations(pentID);
 			rotation %= PentominoBuilder.getNumberOfRotations(pentID);

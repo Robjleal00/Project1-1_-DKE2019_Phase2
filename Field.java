@@ -1,13 +1,15 @@
 public class Field {
-	private static final int HEIGHT = 30;
+	private static final int HEIGHT = 20;
 	private static final int WIDTH = 5;
 	private static final int DEFUALT_CELL_SIZE = 20;
+	private static UI ui;
 
 	private static int[][] used;
 
 	private static int score = 0;
 
-	public static void init() {
+	public static void init(UI _ui) {
+		ui = _ui;
 		used = new int[HEIGHT][WIDTH];
 		for (int i = 0; i < HEIGHT; i++) 
 			for (int j = 0; j < WIDTH; j++) 
@@ -36,6 +38,7 @@ public class Field {
 					used[y + i][x + j] = pentID;
 			}
 		}
+
 		return true;
 	}
 
