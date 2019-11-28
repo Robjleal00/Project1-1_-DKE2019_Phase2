@@ -3,16 +3,26 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
 
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+
 // This class takes care of all the graphics to display a certain state
 public class UI extends JPanel {
     private JFrame window;
     private int[][] state;
     private int size;
 
+    private PrintWriter writer;
+
     // Constructor: sets everything up
-    public UI(int y, int x, int _size) {
+    public UI(int y, int x, int _size) throws FileNotFoundException, UnsupportedEncodingException {
         size = _size;
         setPreferredSize(new Dimension(x * size, y * size));
+
+        writer = new PrintWriter("debug.tet", "UTF-8");
 
         window = new JFrame("Pentomino");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -94,19 +104,25 @@ public class UI extends JPanel {
             }
         }
 
-        /*for (int i = 0; i < _state.length; i++) {
+        for (int i = 0; i < _state.length; i++) {
             for (int j = 0; j < _state[i].length; j++) {
-                System.out.print(_state[i][j] + " ");
+                if (state[i][j] == -1)
+                    writer.print("-1 ");
+                else if (state[i][j] < 10)
+                    writer.print(" " + state[i][j] + " ");
+                else
+                    writer.print(state[i][j] + " ");
             }
-            System.out.println();
+            writer.println();
         }
-        System.out.println();*/
+        writer.println();
 
         // Tells the system a frame update is required
         repaint();
     }
     
     public void closeWindow() {
+        writer.close();
     	window.setVisible(false);
     	window.dispose();
     }

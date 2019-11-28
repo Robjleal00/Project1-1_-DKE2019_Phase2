@@ -14,7 +14,7 @@ Ivan Poliakov
 
 @Bugs detected
 
-some of "dense" wall kicks dont work
+fixed: some of "dense" wall kicks dont work
 
 @TODO
 

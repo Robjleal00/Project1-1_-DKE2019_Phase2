@@ -138,6 +138,9 @@ public class Pentomino {
 		bits = PentominoBuilder.getPent(pentID, rotation);
 
 		if (!Field.addPentomino(this)) {
+			x -= dx;
+			y -= dy;
+
 			rotation++;
 			rotation %= PentominoBuilder.getNumberOfRotations(pentID);
 			bits = PentominoBuilder.getPent(pentID, rotation);			
@@ -175,6 +178,9 @@ public class Pentomino {
 		bits = PentominoBuilder.getPent(pentID, rotation);
 
 		if (!Field.addPentomino(this)) {
+			x -= dx;
+			y -= dy;
+
 			rotation--;
 			rotation += PentominoBuilder.getNumberOfRotations(pentID);
 			rotation %= PentominoBuilder.getNumberOfRotations(pentID);

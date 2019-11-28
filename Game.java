@@ -53,24 +53,30 @@ public class Game {
 				}
 				else {
 					Field.updateScore();
-					currentObj = new Pentomino();
+					currentObj = new Pentomino(0);
 				}
 			}
 		}
 	};
 
 	public static void main(String[] args) {
-		ui = new UI(Field.getHeight(), Field.getWidth(), Field.getCellSize());
-		Field.init();
+		try {
+			ui = new UI(Field.getHeight(), Field.getWidth(), Field.getCellSize());
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+
+		Field.init(ui);
 		if (!PentominoBuilder.init()) {
 			System.exit(0);
 		}
 
-		currentObj = new Pentomino();
+		currentObj = new Pentomino(0);
 		KeyListener keyListener = new MyKeyListener();
 		ui.add(keyListener);
 
-		ses = Executors.newSingleThreadScheduledExecutor();;
-		scheduledFuture = ses.scheduleAtFixedRate(iteration, 0, 400, TimeUnit.MILLISECONDS);
+		ses = Executors.newSingleThreadScheduledExecutor();
+		scheduledFuture = ses.scheduleAtFixedRate(iteration, 0, 1000, TimeUnit.MILLISECONDS);
 	}
 }

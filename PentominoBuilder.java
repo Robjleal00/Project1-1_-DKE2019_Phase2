@@ -10,9 +10,8 @@ public class PentominoBuilder {
     public static boolean init() {
         database = new ArrayList<>();
 
-        File input = new File("data.tet");
-
         try {
+            File input = new File("data.tet");
             Scanner scanner = new Scanner(input);
             while (scanner.hasNextLine()) {
                 int n = scanner.nextInt(), l = scanner.nextInt();
