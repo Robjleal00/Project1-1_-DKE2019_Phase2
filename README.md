@@ -14,23 +14,25 @@ Ivan Poliakov
 
 @Bugs detected
 
+rotation glitch when pentomino disappears due to spamming one key and the player loses
+
 fixed: some of "dense" wall kicks dont work
 
 @TODO
 
-reflections if needed
+mascot
+ 
+decide the size of the board and score system
 
 advanced design
 
 merge with menu and the rest
 
 login system
-
-advanced score system
-
+                                             
 help and copyright stuff
 
-language settings and color customization
+language settings and color customization + keys custimozation
 
 soundtrack
 
