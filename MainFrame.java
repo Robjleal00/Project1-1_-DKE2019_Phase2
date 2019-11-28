@@ -13,8 +13,15 @@ import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
-public class MainFrame {
+import java.awt.Container;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+
+public class MainFrame {
 	private JFrame frame;
 	private JPanel gamePanel;
 	private JTextField textField;
@@ -54,8 +61,7 @@ public class MainFrame {
 		frame.setBounds(100, 100, 1000, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
-		//frame.setIconImage(logo); TODO set an icon image 
+		frame.setIconImage(new ImageIcon(ClassLoader.getSystemResource("res/logo.png")).getImage());
 		
 		menuPanel = new JPanel();
 		menuPanel.setBounds(0, Util.realY(0), frame.getWidth(), (frame.getHeight()));
@@ -71,55 +77,43 @@ public class MainFrame {
 		lblGamertag.setForeground(Color.WHITE);
 		menuPanel.add(lblGamertag);
 		
-		
 		frame.getContentPane().add(menuPanel);
-		
-
 		
 		gamePanel = new JPanel();
 		gamePanel.setBounds(0, Util.realY(0), frame.getWidth(), (frame.getHeight()));
 		gamePanel.setLayout(null);
 		
-		
 		frame.getContentPane().add(gamePanel);
-		
 		
 		menuPanel.setVisible(true);
 		gamePanel.setVisible(false);
 		
 		createUI(menuPanel);
-		createUI(gamePanel);
-		
+		//createUI(gamePanel);
 	}
 	
 	private void createUI(JPanel p) throws IOException {
 		JButton btnHome = new JButton("Home");
 		btnHome.setBounds(114, 378, 117, 29);
 		btnHome.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent e) {
 				
 				menuPanel.setVisible(true);
 				gamePanel.setVisible(false);
 				frame.requestFocus();
-				
 			}
-			
 		});
 		p.add(btnHome);
 		
 		JButton btnGame = new JButton("Game");
 		btnGame.setBounds(114, 403, 117, 29);
 		btnGame.addActionListener(new ActionListener() {
-
+			
 			public void actionPerformed(ActionEvent e) {
-				
 				menuPanel.setVisible(false);
 				gamePanel.setVisible(true);
 				frame.requestFocus();
-				
 			}
-			
 		});
 		p.add(btnGame);
 		
@@ -132,11 +126,8 @@ public class MainFrame {
 		btnQuit.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				
 				System.exit(0);
-				
 			}
-			
 		});
 		p.add(btnQuit);
 		
