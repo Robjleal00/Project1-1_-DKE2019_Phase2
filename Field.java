@@ -1,6 +1,6 @@
 public class Field {
-	private static final int HEIGHT = 20;
-	private static final int WIDTH = 5;
+	private static final int HEIGHT = 40;
+	private static final int WIDTH = 6;
 	private static final int DEFUALT_CELL_SIZE = 20;
 	private static UI ui;
 
@@ -109,9 +109,5 @@ public class Field {
 
 	public static void setUsed(int[][] _used) {
 		used = _used;
-	}
-
-	public static int getCell(int _row, int _col) {
-		return used[_row][_col];
 	}
 }

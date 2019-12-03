@@ -53,7 +53,7 @@ public class Game {
 				}
 				else {
 					Field.updateScore();
-					currentObj = new Pentomino(0);
+					currentObj = new Pentomino();
 				}
 			}
 		}
@@ -72,11 +72,11 @@ public class Game {
 			System.exit(0);
 		}
 
-		currentObj = new Pentomino(0);
+		currentObj = new Pentomino();
 		KeyListener keyListener = new MyKeyListener();
 		ui.add(keyListener);
 
 		ses = Executors.newSingleThreadScheduledExecutor();
-		scheduledFuture = ses.scheduleAtFixedRate(iteration, 0, 1000, TimeUnit.MILLISECONDS);
+		scheduledFuture = ses.scheduleAtFixedRate(iteration, 0, 500, TimeUnit.MILLISECONDS);
 	}
 }
