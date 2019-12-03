@@ -19,11 +19,7 @@ rotation glitch when pentomino disappears due to spamming one key and the player
 fixed: some of "dense" wall kicks dont work
 
 @TODO
-
-mascot
- 
-decide the size of the board and score system
-
+      
 advanced design
 
 merge with menu and the rest

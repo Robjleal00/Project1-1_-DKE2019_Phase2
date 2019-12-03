@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.concurrent.*;
+import java.util.*;
 import java.lang.*;
 
 public class Game {
@@ -15,14 +16,18 @@ public class Game {
 	
 		}
 		public void keyPressed(KeyEvent event) {
-			switch (event.getKeyCode()) {
-				case KeyEvent.VK_LEFT:  currentObj.moveLeft();    ui.setState(Field.getUsed()); return;
-				case KeyEvent.VK_RIGHT: currentObj.moveRight();   ui.setState(Field.getUsed()); return;
-				case KeyEvent.VK_DOWN:  currentObj.moveDown();    ui.setState(Field.getUsed()); return;
-				case KeyEvent.VK_SPACE: currentObj.drop();        ui.setState(Field.getUsed()); return;
-				case KeyEvent.VK_Q:     currentObj.rotateLeft();  ui.setState(Field.getUsed()); return;
-				case KeyEvent.VK_E:     currentObj.rotateRight(); ui.setState(Field.getUsed()); return;
-			}
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					switch (event.getKeyCode()) {
+						case KeyEvent.VK_LEFT:  currentObj.moveLeft();    ui.setState(Field.getUsed()); break;
+						case KeyEvent.VK_RIGHT: currentObj.moveRight();   ui.setState(Field.getUsed()); break;
+						case KeyEvent.VK_DOWN:  currentObj.moveDown();    ui.setState(Field.getUsed()); break;
+						case KeyEvent.VK_SPACE: currentObj.drop();        ui.setState(Field.getUsed()); break;
+						case KeyEvent.VK_Q:     currentObj.rotateLeft();  ui.setState(Field.getUsed()); break;
+						case KeyEvent.VK_E:     currentObj.rotateRight(); ui.setState(Field.getUsed()); break;
+					}
+				}		
+			});
 		}
 		public void keyReleased(KeyEvent event) {
 
