@@ -14,7 +14,7 @@ Ivan Poliakov
 
 @Bugs detected
 
-rotation glitch when pentomino disappears due to spamming one key and the player loses
+fixed: rotation glitch when pentomino disappears due to spamming one key and the player loses
 
 fixed: some of "dense" wall kicks dont work
 
