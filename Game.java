@@ -70,7 +70,7 @@ public class Game {
 					}*/
 
 					Field.updateScore();
-					currentObj = new Pentomino();
+					currentObj = new Pentomino(0);
 				}
 			}
 		}
@@ -90,7 +90,7 @@ public class Game {
 		}
 		RandomEngine.init();
 
-		currentObj = new Pentomino();
+		currentObj = new Pentomino(0);
 		KeyListener keyListener = new MyKeyListener();
 		ui.add(keyListener);
 

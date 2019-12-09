@@ -55,7 +55,8 @@ public class Field {
 		}
 	}
 
-	public static void updateScore() {
+	public static boolean updateScore() {
+		boolean result = false;
 		int current = 0, id = HEIGHT - 1;
 		for (int i = HEIGHT - 1; i >= 0; i--) {
 			boolean line = true;
@@ -64,22 +65,16 @@ public class Field {
 					line = false;
 
 			if (!line) {
-				if (current == 4)
-					score += 800;
-				else
-					score += 100 * current;
-				current = 0;
 				for (int j = 0; j < WIDTH; j++)
 					used[id][j] = used[i][j]; 
 				id--;
 			}
-			else
-				current++;
+			else {
+				score += 100;
+				result = true;
+			}
 		}	
-		if (current == 4)
-			score += 800;
-		else
-			score += 100 * current;
+		return result;
 	}
 
 	public static int getScore() {

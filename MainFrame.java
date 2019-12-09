@@ -137,10 +137,6 @@ public class MainFrame {
 		menuPanel.add(textField);
 		textField.setColumns(10);
 		
-		
-		
-		
-		
 		JLabel lblGamertag = new JLabel("Gamertag:");
 		lblGamertag.setBounds(114, 335, 77, 16);
 		lblGamertag.setForeground(Color.WHITE);
