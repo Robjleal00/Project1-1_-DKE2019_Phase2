@@ -33,6 +33,11 @@ import java.awt.event.*;
 import java.util.concurrent.*;
 import java.lang.*;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.Rectangle2D;
+
 public class Home extends javax.swing.JFrame {
 
     /**
@@ -104,13 +109,37 @@ public class Home extends javax.swing.JFrame {
         QUIT
     }
 
+    private Color GetColorOfID(int i) {
+        if(i==0) {return Color.BLUE;}
+        else if(i==1) {return Color.ORANGE;}
+        else if(i==2) {return Color.CYAN;}
+        else if(i==3) {return Color.GREEN;}
+        else if(i==4) {return Color.MAGENTA;}
+        else if(i==5) {return Color.PINK;}
+        else if(i==6) {return Color.RED;}
+        else if(i==7) {return Color.YELLOW;}
+        else if(i==8) {return  new Color(  0,   0,   0);}
+        else if(i==9) {return  new Color(  0,   0, 100);}
+        else if(i==10) {return new Color(100,   0,   0);}
+        else if(i==11) {return new Color(  0, 100,   0);}
+        else if(i==12) {return new Color(153, 153,   0);}
+        else if(i==13) {return new Color(102, 178, 255);}
+        else if(i==14) {return new Color(255, 153, 153);}
+        else if(i==15) {return new Color(178, 102, 255);}
+        else if(i==16) {return new Color(102, 255, 102);}
+        else if(i==17) {return new Color(153,   0,   0);}
+        else {return Color.LIGHT_GRAY;}
+    }
+
     FrontState state;
 
     public ScheduledExecutorService ses;
     public ScheduledFuture<?> runningIteration;
+    public ScheduledFuture<?> runningTimerIteration;
 
     public Home() {
         initComponents();
+        setIconImage(new ImageIcon(ClassLoader.getSystemResource("res/logo.png")).getImage());
 
         getContentPane().add(jPanel1);
         jPanel1.setBounds(0, 0, 220, 720);
@@ -164,6 +193,8 @@ public class Home extends javax.swing.JFrame {
                     }
                     currentPlayer = text;
                     current_player_highest_score = score;
+                    jLabel15.setText(currentPlayer);
+                    jLabel14.setText("highest score " + current_player_highest_score);
                     enterApp();
                     break;
 
@@ -181,6 +212,8 @@ public class Home extends javax.swing.JFrame {
                     } 
                     currentPlayer = text;
                     current_player_highest_score = 0;
+                    jLabel15.setText(currentPlayer);
+                    jLabel14.setText("highest score " + current_player_highest_score);
                     enterApp();
                     break;
                 }
@@ -308,23 +341,44 @@ public class Home extends javax.swing.JFrame {
                 jPanel4.setState(Field.getUsed());
             else {
                 if (!currentObj.allInside()) {
+                    current_player_highest_score = Math.max(Field.getScore(), current_player_highest_score);
+                    jLabel14.setText("highest score " + current_player_highest_score);
+                    try {
+                        rank.addScore(currentPlayer, current_player_highest_score);
+                    } catch(Exception e) {
+                        e.printStackTrace();
+                    }
                     ses.shutdown();
                     return;
                 }
                 else {
                     Field.updateScore();
+
+                    label2.setText(Field.getScore() / 100 + " lines");
+                    label3.setText(Field.getScore() + " score");
                     currentObj = nxtObj;
                     nxtObj = new Pentomino();
+                    jPanel5.repaint();
                 }
             }
+        }
+    };
+
+    public int currentTime;
+    public Runnable timerIteration = new Runnable() {
+        public void run() {
+            currentTime++;
+            label1.setText(currentTime / 60 + ":" + (currentTime % 60) / 10 + (currentTime % 60) % 10);
+            label4.setText(currentTime / 60 + ":" + (currentTime % 60) / 10 + (currentTime % 60) % 10);
         }
     };
 
     public void enterGame() {
         if (state == FrontState.PLAY || state == FrontState.BOT)
             try {
-                ses.shutdown();
                 runningIteration.cancel(true);
+                runningTimerIteration.cancel(true);
+                ses.shutdown();
             } catch (SecurityException e) {
                 e.printStackTrace();
             }
@@ -347,22 +401,24 @@ public class Home extends javax.swing.JFrame {
 
         currentObj = new Pentomino();
         nxtObj = new Pentomino();
+        jPanel5.repaint();
         jPanel3.addKeyListener(myKeyListener);
 
         jPanel1.requestFocusInWindow();
         jPanel3.requestFocusInWindow();
 
-        //ses.shutdown();
-        ses = Executors.newSingleThreadScheduledExecutor();
+        currentTime = 0;
+        ses = Executors.newScheduledThreadPool(2);
         runningIteration = ses.scheduleAtFixedRate(pushGameIteration, 0, 500, TimeUnit.MILLISECONDS);
-        //ses.scheduleAtFixedRate(timerIteration, 0, 1000, TimeUnit.MILLISECONDS);
+        runningTimerIteration = ses.scheduleAtFixedRate(timerIteration, 0, 1000, TimeUnit.MILLISECONDS);
     }
 
     public void enterBot() {
         if (state == FrontState.PLAY || state == FrontState.BOT)
             try {
-                ses.shutdown();
                 runningIteration.cancel(true);
+                runningTimerIteration.cancel(true);
+                ses.shutdown();
             } catch (SecurityException e) {
                 e.printStackTrace();
             }
@@ -399,7 +455,6 @@ public class Home extends javax.swing.JFrame {
             if (positions.size() == 0)
                 try {
                     ses.shutdown();
-                    runningIteration.cancel(true);
                 } catch (SecurityException e) {
                     e.printStackTrace();
                 }
@@ -418,11 +473,14 @@ public class Home extends javax.swing.JFrame {
             }
 
             Field.updateScore();
+            label5.setText(Field.getScore() / 100 + " lines");
+            label6.setText(Field.getScore() + " score");
             jPanel7.setState(Field.getUsed());
 
             PositionSearch.init();
             currentObj = nxtObj;
             nxtObj = new Pentomino();
+            jPanel8.repaint();
             positions = PositionSearch.search(currentObj);
         }
     };
@@ -432,7 +490,6 @@ public class Home extends javax.swing.JFrame {
             if (positions.size() == 0)
                 try {
                     ses.shutdown();
-                    runningIteration.cancel(true);
                 } catch (SecurityException e) {
                     e.printStackTrace();
                 }
@@ -440,9 +497,23 @@ public class Home extends javax.swing.JFrame {
             int id = getBestPosition(currentObj.getPentID(), positions, f);
             PositionSearch.buildBestPath(currentObj, positions.get(id), jPanel7);
 
+            boolean result = Field.updateScore();
+            if (result) {
+                try {
+                    Thread.sleep(2000);
+                }
+                catch(InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+                label5.setText(Field.getScore() / 100 + " lines");
+                label6.setText(Field.getScore() + " score");
+                jPanel7.setState(Field.getUsed());
+            }
+
             PositionSearch.init();
             currentObj = nxtObj;
             nxtObj = new Pentomino();
+            jPanel8.repaint();
             positions = PositionSearch.search(currentObj);
         }
     };
@@ -456,10 +527,14 @@ public class Home extends javax.swing.JFrame {
 
         currentObj = new Pentomino();
         nxtObj = new Pentomino();
+        jPanel8.repaint();
         PositionSearch.init();
         positions = PositionSearch.search(currentObj);
-        ses = Executors.newSingleThreadScheduledExecutor();
+
+        currentTime = 0;
+        ses = Executors.newScheduledThreadPool(2);
         runningIteration = ses.scheduleWithFixedDelay(botIteration, 0, 2000, TimeUnit.MILLISECONDS);
+        runningTimerIteration = ses.scheduleAtFixedRate(timerIteration, 0, 1000, TimeUnit.MILLISECONDS);
     }
 
     public void playGameAnimated(Vec p) {
@@ -470,10 +545,14 @@ public class Home extends javax.swing.JFrame {
 
         currentObj = new Pentomino();
         nxtObj = new Pentomino();
+        jPanel8.repaint();
         PositionSearch.init();
         positions = PositionSearch.search(currentObj);
-        ses = Executors.newSingleThreadScheduledExecutor();
+
+        currentTime = 0;
+        ses = Executors.newScheduledThreadPool(2);
         runningIteration = ses.scheduleWithFixedDelay(botIterationAnimated, 0, 500, TimeUnit.MILLISECONDS);
+        runningTimerIteration = ses.scheduleAtFixedRate(timerIteration, 0, 1000, TimeUnit.MILLISECONDS);
     }
 
     public int getBestPosition(int pentID, ArrayList<int[]> positions, Function f) {
@@ -499,6 +578,7 @@ public class Home extends javax.swing.JFrame {
         if (state == FrontState.PLAY || state == FrontState.BOT)
             try {
                 runningIteration.cancel(true);
+                runningTimerIteration.cancel(true);
                 ses.shutdown();
             } catch (SecurityException e) {
                 e.printStackTrace();
@@ -536,7 +616,47 @@ public class Home extends javax.swing.JFrame {
             e.printStackTrace();
             System.exit(0);
         }
-        jPanel5 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel() {
+            public void paintComponent(Graphics g) {
+                try {
+                Graphics2D g2 = (Graphics2D)g;
+
+                int sz = 16;
+                int length = nxtObj.getLength();
+                int width = length * sz;
+                int height = width;
+
+                int shift = (150 - width) / 2; 
+                g2.setColor(Color.LIGHT_GRAY);
+                g2.fill(getVisibleRect());
+                g2.setColor(Color.GRAY);
+
+                for (int i = 0; i <= length; i++) {
+                    g2.drawLine(shift, shift + i * sz, shift + length * sz, shift + i * sz);
+                }
+
+                for (int i = 0; i <= length; i++) {
+                    g2.drawLine(shift + i * sz, shift, shift + i * sz, shift + length * sz);
+                }
+
+                int[][] state = nxtObj.getBits();
+                for (int i = 0; i < state.length; i++) {
+                    for (int j = 0; j < state[0].length; j++) {
+                        if (state[i][j] == 1) {
+                            g2.setColor(GetColorOfID(nxtObj.getPentID()));
+                            g2.fill(new Rectangle2D.Double(shift + j * sz + 1, shift + i * sz + 1, sz - 1, sz - 1));
+                        } else {
+                            g2.setColor(GetColorOfID(-1));
+                            g2.fill(new Rectangle2D.Double(shift + j * sz + 1, shift + i * sz + 1, sz - 1, sz - 1));
+                        }
+                    }
+                }
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
         label1 = new java.awt.Label();
         label2 = new java.awt.Label();
         label3 = new java.awt.Label();
@@ -547,7 +667,46 @@ public class Home extends javax.swing.JFrame {
             e.printStackTrace();
             System.exit(0);
         }
-        jPanel8 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel() {
+            public void paintComponent(Graphics g) {
+                try {
+                Graphics2D g2 = (Graphics2D)g;
+
+                int sz = 16;
+                int length = nxtObj.getLength();
+                int width = length * sz;
+                int height = width;
+
+                int shift = (150 - width) / 2; 
+                g2.setColor(Color.LIGHT_GRAY);
+                g2.fill(getVisibleRect());
+                g2.setColor(Color.GRAY);
+
+                for (int i = 0; i <= length; i++) {
+                    g2.drawLine(shift, shift + i * sz, shift + length * sz, shift + i * sz);
+                }
+
+                for (int i = 0; i <= length; i++) {
+                    g2.drawLine(shift + i * sz, shift, shift + i * sz, shift + length * sz);
+                }
+
+                int[][] state = nxtObj.getBits();
+                for (int i = 0; i < state.length; i++) {
+                    for (int j = 0; j < state[0].length; j++) {
+                        if (state[i][j] == 1) {
+                            g2.setColor(GetColorOfID(nxtObj.getPentID()));
+                            g2.fill(new Rectangle2D.Double(shift + j * sz + 1, shift + i * sz + 1, sz - 1, sz - 1));
+                        } else {
+                            g2.setColor(GetColorOfID(-1));
+                            g2.fill(new Rectangle2D.Double(shift + j * sz + 1, shift + i * sz + 1, sz - 1, sz - 1));
+                        }
+                    }
+                }
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }  
+        };
         label4 = new java.awt.Label();
         label5 = new java.awt.Label();
         label6 = new java.awt.Label();
@@ -884,12 +1043,12 @@ public class Home extends javax.swing.JFrame {
         jLabel17.setBackground(new java.awt.Color(39, 39, 39));
         jLabel17.setForeground(new java.awt.Color(39, 39, 39));
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel17.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(100, 100, 200), 5));
+        //jLabel17.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(100, 100, 200), 5));
 
         jLabel18.setBackground(new java.awt.Color(39, 39, 39));
         jLabel18.setForeground(new java.awt.Color(39, 39, 39));
         jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel18.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 100, 100), 5));
+        //jLabel18.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 100, 100), 5));
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
