@@ -8,7 +8,11 @@ import java.io.*;
 
 public class Log {
 	public static String filename, resultFilename;
-
+	/**
+	 * Make new file
+	 * @param the population size
+	 * @throws IOException when the file does not exist.
+	 */
 	public static void init(int n) throws IOException {
 		filename = "generation-" + Integer.toString(n) + ".log";
 		PrintWriter log = new PrintWriter(filename, "UTF-8");
@@ -18,7 +22,12 @@ public class Log {
 		PrintWriter result = new PrintWriter(resultFilename, "UTF-8");
 		result.close();
 	}
-
+	/**
+	 * Create a vector 
+	 * @param name the file name
+	 * @return a vector (Just like in Linear Algebra :D !)
+	 * @throws IOException
+	 */
 	public static Vec[] read(String name) throws IOException {
 		File input = new File(name);
         Scanner scanner = new Scanner(input);
@@ -37,7 +46,13 @@ public class Log {
 	    	result[i] = list.get(i);
 	    return result;
 	}
-
+	
+	/**
+	 * Read population and fitnesses
+	 * @param generation A given population
+	 * @param fitness the fitnesses for this given population
+	 * @throws IOException
+	 */
 	public static void readGenerationAndFitness(Vec[] generation, int[] fitness) throws IOException {
 		File input = new File(filename);
 		Scanner scanner = new Scanner(input);
@@ -54,7 +69,12 @@ public class Log {
 			generation[j] = current; 
 		}
 	}
-
+	
+	/**
+	 * Give information about the current state of our population
+	 * @param population the number of individuals in the population
+	 * @throws IOException
+	 */
 	public static void generateLog(int population) throws IOException {
 		PrintWriter init = new PrintWriter("generation-final-0.log", "UTF-8");
 
@@ -75,7 +95,12 @@ public class Log {
 		}
 		init.close();
 	}
-
+	
+	/**
+	 * Print position for each individual in the population.
+	 * @param positions an arrayList of integers array
+	 * @throws IOException
+	 */
 	public static void printPositions(ArrayList<int[]> positions) throws IOException {
 		FileWriter fw = new FileWriter(filename, true);
 		BufferedWriter bw = new BufferedWriter(fw);
@@ -93,7 +118,12 @@ public class Log {
 		bw.close();
 		fw.close();
 	}
-
+	
+	/**
+	 * Write down the result in a file 
+	 * @param generation the population of individuals (vectors)
+	 * @throws IOException
+	 */
 	public static void writeResultGeneration(Vec[] generation) throws IOException {
 		FileWriter fw = new FileWriter(resultFilename, true);
 		BufferedWriter bw = new BufferedWriter(fw);
@@ -111,6 +141,12 @@ public class Log {
 		fw.close();
 	}
 
+	/**
+	 * Write in a file the fitness data
+	 * @param generation a generation of vectors(individuals)
+	 * @param fitness an array with their respective fitness
+	 * @throws IOException
+	 */
 	public static void writeFitnessFunctionData(Vec[] generation, int[] fitness) throws IOException {
 		FileWriter fw = new FileWriter(filename, true);
 		BufferedWriter bw = new BufferedWriter(fw);
@@ -128,7 +164,12 @@ public class Log {
 		bw.close();
 		fw.close();
 	}
-
+	
+	/**
+	 * Write in a text file the offset(set of children) resulting of the parents
+	 * @param v a list containing vectors (individuals)
+	 * @throws IOException
+	 */
 	public static void writeOffset(ArrayList<Vec[]> v) throws IOException {
 		FileWriter fw = new FileWriter(filename, true);
 		BufferedWriter bw = new BufferedWriter(fw);
@@ -157,7 +198,12 @@ public class Log {
 		bw.close();
 		fw.close();
 	}
-
+	
+	/**
+	 * Write the mutation offset information inside a text file.
+	 * @param v an arrayList containing array of vectors.
+	 * @throws IOException
+	 */
 	public static void writeMutatedOffset(ArrayList<Vec[]> v) throws IOException {
 		FileWriter fw = new FileWriter(filename, true);
 		BufferedWriter bw = new BufferedWriter(fw);
@@ -191,7 +237,12 @@ public class Log {
 		bw.close();
 		fw.close();
 	}
-
+	/**
+	 * Write inside a text file the replacements for two vectors
+	 * @param a an array of vectors
+	 * @param b an array of vectors
+	 * @throws IOException
+	 */
 	public static void writeReplacements(Vec[] a, Vec[] b) throws IOException {
 		FileWriter fw = new FileWriter(filename, true);
 		BufferedWriter bw = new BufferedWriter(fw);

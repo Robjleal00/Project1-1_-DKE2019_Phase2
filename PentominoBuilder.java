@@ -5,6 +5,10 @@ import java.util.Scanner;
 public class PentominoBuilder {
     private static ArrayList<int[][][]> database;
     
+    /**
+     * Build the database
+     * @return true if the database has been created or false and in that case throws an error  file not found exception
+     */
     public static boolean init() {
         database = new ArrayList<>();
 
@@ -26,7 +30,9 @@ public class PentominoBuilder {
             return false;
         }
     }
-
+    /**
+     * Print out the database
+     */
     public static void print() {
         System.out.println(database.size());
 
@@ -44,15 +50,29 @@ public class PentominoBuilder {
             }
         }
     }
-    
+    /**
+     * Get the number of rotation for a certain pento
+     * @param pentID the pentomino's ID
+     * @return an integer representing the pentomino's ID
+     */
     public static int getNumberOfRotations(int pentID) {
         return (database.get(pentID)).length;
     }
-
+    /**
+     * Get the pentomino (3 dim)
+     * @param pentID an integer representing the pentomino's ID
+     * @return the pentomino associated with that pentomino ID 
+     */
     public static int[][][] getPent(int pentID) {
         return database.get(pentID);
     }
-
+    
+    /**
+     * Get the pentomino (2 dim) 
+     * @param pentID
+     * @param _id
+     * @return the pentomino associated with that pentomino ID 
+     */
     public static int[][] getPent(int pentID, int _id) {
         return (database.get(pentID))[_id];
     }
