@@ -6,22 +6,14 @@ public class Rank {
     //Instances
    
     private ArrayList <String> gameTags = new ArrayList<String>();
-    private ArrayList <Integer> Scores = new ArrayList<Integer>();
+    private ArrayList <Integer> scores = new ArrayList<Integer>();
    
     //Constructor
    
-    public Rank(ArrayList<String>gameTags,ArrayList<Integer>Scores) {
-       for(String s : gameTags) {
-    	   System.out.println(s);
-       }
-       for(int s : Scores) {
-    	   System.out.println(s);
-       }
-        this.gameTags = gameTags;
-        this.Scores = Scores;
+    public Rank (ArrayList<String> _gameTags, ArrayList<Integer> _scores) {
+        gameTags = _gameTags;
+        scores = _scores;
     }
-    
-    
    
     //Writing file (doesn't need to be called every time because after each methods it is called)
     /*
@@ -32,76 +24,65 @@ public class Rank {
         File file = new File("Score.txt");
         PrintWriter out = new PrintWriter(file);
        
-        if(gameTags.size() != Scores.size()) {
+        if(gameTags.size() != scores.size()) {
             System.out.println("ERROR");
         }
        
-        for(int i = 0; i < this.gameTags.size(); i++) {
-            //out.print(this.gameTags.get(i) + "<" + this.Scores.get(i) + ">" + System.lineSeparator());
-        	out.print(this.gameTags.get(i) + "%" + this.Scores.get(i) + System.lineSeparator());
+        for(int i = 0; i < gameTags.size(); i++) {
+            out.print(gameTags.get(i) + "%" + scores.get(i) + System.lineSeparator());
         }
         out.close();
-       
+    }
+
+    public void print() {
+        for (int i = 0; i < gameTags.size(); i++) {
+            System.out.print(gameTags.get(i) + " ");
+            System.out.println(scores.get(i));
+        }
+        System.out.println();
     }
    
     //Add new gameTag if is not present in the file other wise prints an error
    
     public void addUser(String newTag) throws FileNotFoundException {
        
-            if(!(this.gameTags.contains(newTag))) {
-                this.gameTags.add(newTag);
-                this.Scores.add(0);
-               
+            if(!(gameTags.contains(newTag))) {
+                gameTags.add(newTag);
+                scores.add(0);
             }
             else {
                 System.out.println("Error");      
             }
            
             FileWriter();
-           
     }
    
     //Add Scores to players if it is higher that the one that they score before
    
-    public void addScore(String gameTag,int newScore) throws FileNotFoundException {
+    public void addScore(String gameTag, int newScore) throws FileNotFoundException {
        
-        if(this.gameTags.contains(gameTag)) {
-            int x = this.gameTags.indexOf(gameTag);
-            if(this.Scores.get(x) < newScore) {
-            this.Scores.set(x, newScore);
+        if (gameTags.contains(gameTag)) {
+            int x = gameTags.indexOf(gameTag);
+            if(scores.get(x) < newScore) {
+                scores.set(x, newScore);
             }
         }
         else {
             System.out.println("The GameTag is not present");
-           
         }  
        
         FileWriter();
-       
-    }
-    
-    public List<String> getGameTags(){
-    	return gameTags;
     }
    
     //Get Score from the GameTag returns the score of certain gameTag if the tag exist
    
     public int getScore(String gameTag) {
-       
-        int out = 0;
-       
-        if(this.gameTags.contains(gameTag)) {
-            int x = this.gameTags.indexOf(gameTag);
-            out = this.Scores.get(x);
+        System.out.println(gameTags.size());
+        for (int i = 0; i < gameTags.size(); i++) {
+            System.out.println(gameTags.get(i));
+            if (gameTag.equals(gameTags.get(i)))
+                return scores.get(i);
         }
-        else {
-            System.out.println("The GameTag is not present");
-        }
-        return out;
-       
-    }
-   
-    public void getHighScore() {
-         System.out.println(Collections.max(Scores));  
+        return -1;
     }
 }

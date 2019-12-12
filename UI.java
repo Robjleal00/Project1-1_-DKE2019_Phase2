@@ -11,41 +11,19 @@ import java.util.ArrayList;
 
 // This class takes care of all the graphics to display a certain state
 public class UI extends JPanel {
-    private JFrame window;
     private int[][] state;
     private int size;
-
-    private PrintWriter writer;
 
     // Constructor: sets everything up
     public UI(int y, int x, int _size) throws FileNotFoundException, UnsupportedEncodingException {
         size = _size;
-        setPreferredSize(new Dimension(x * size, y * size));
-
-        writer = new PrintWriter("debug.tet", "UTF-8");
-
-        window = new JFrame("Pentomino");
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(false);
-        //window.setLocationRelativeTo(null);
-        window.add(this);
-        window.pack();
-        window.setVisible(true);
-
+        
         state = new int[y][x];
         for (int i = 0; i < state.length; i++) {
             for (int j = 0; j < state[i].length; j++) {
                 state[i][j] = -1;
             }
         }
-    }
-
-    public void add(KeyListener keyListener) {
-        JPanel panel = new JPanel();
-        window.getContentPane().add(panel);
-        panel.addKeyListener(keyListener);
-        panel.setFocusable(true);
-        panel.requestFocusInWindow();
     }
 
     // Paint function, called by the system if required for a new frame, uses the state stored by the UI class
@@ -104,26 +82,8 @@ public class UI extends JPanel {
             }
         }
 
-        for (int i = 0; i < _state.length; i++) {
-            for (int j = 0; j < _state[i].length; j++) {
-                if (state[i][j] == -1)
-                    writer.print("-1 ");
-                else if (state[i][j] < 10)
-                    writer.print(" " + state[i][j] + " ");
-                else
-                    writer.print(state[i][j] + " ");
-            }
-            writer.println();
-        }
-        writer.println();
-
         // Tells the system a frame update is required
         repaint();
-    }
-    
-    public void closeWindow() {
-        writer.close();
-    	window.setVisible(false);
-    	window.dispose();
+        setVisible(true);
     }
 }

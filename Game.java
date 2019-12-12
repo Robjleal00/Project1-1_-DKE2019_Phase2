@@ -9,8 +9,7 @@ public class Game {
 	public static UI ui;
 	public static Pentomino currentObj;
 	public static ScheduledExecutorService ses;
-	public static ScheduledFuture<?> scheduledFuture;
-
+	
 	public static class MyKeyListener implements KeyListener {
 		public void keyTyped(KeyEvent event) {
 	
@@ -52,23 +51,10 @@ public class Game {
 					}
 					ui.closeWindow();		
 
-					scheduledFuture.cancel(true);
 					ses.shutdown();
 					return;
 				}
 				else {
-					/*Function f = new Function(new Vec(new double[]{1, 1, 1, 1}));
-					double res = f.calc();
-					System.out.println(res);
-					System.out.println();
-					
-					try {
-					    Thread.sleep(5000);
-					}
-					catch(InterruptedException ex) {
-					    Thread.currentThread().interrupt();
-					}*/
-
 					Field.updateScore();
 					currentObj = new Pentomino(0);
 				}
@@ -76,9 +62,9 @@ public class Game {
 		}
 	};
 
-	public static void main(String[] args) {
+	public static void startGame(JPanel gamePanel) {
 		try {
-			ui = new UI(Field.getHeight(), Field.getWidth(), Field.getCellSize());
+			ui = new UI(Field.getHeight(), Field.getWidth(), Field.getCellSize(), gamePanel);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(0);
@@ -94,7 +80,6 @@ public class Game {
 		KeyListener keyListener = new MyKeyListener();
 		ui.add(keyListener);
 
-		ses = Executors.newSingleThreadScheduledExecutor();
-		scheduledFuture = ses.scheduleWithFixedDelay(iteration, 0, 500, TimeUnit.MILLISECONDS);
+		ses.scheduleWithFixedDelay(iteration, 0, 500, TimeUnit.MILLISECONDS);	
 	}
 }

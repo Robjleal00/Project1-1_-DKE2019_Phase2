@@ -1,7 +1,7 @@
 public class Field {
 	private static final int HEIGHT = 40;
 	private static final int WIDTH = 6;
-	private static final int DEFUALT_CELL_SIZE = 20;
+	private static final int DEFUALT_CELL_SIZE = 16;
 	
 	private static int[][] used;
 
