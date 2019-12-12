@@ -168,6 +168,7 @@ public class Home extends javax.swing.JFrame {
         jPanel12.setVisible(false);
 
         jButton4.setVisible(false);
+        jButton6.setVisible(false);
 
         state = FrontState.LOGIN;
 
