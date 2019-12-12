@@ -9,15 +9,19 @@ public class Rank {
     private ArrayList <Integer> scores = new ArrayList<Integer>();
    
     //Constructor
-   
+    
+    /**
+     * Initialization of rank
+     * @param _gameTags set of gametags
+     * @param _scores set of scores  
+     */   
     public Rank (ArrayList<String> _gameTags, ArrayList<Integer> _scores) {
         gameTags = _gameTags;
         scores = _scores;
     }
    
-    //Writing file (doesn't need to be called every time because after each methods it is called)
-    /*
-     *
+    /**
+     * Updating the file  
      */
     public void FileWriter() throws FileNotFoundException{
        
@@ -34,6 +38,9 @@ public class Rank {
         out.close();
     }
 
+    /**
+     * printing everything  
+     */
     public void print() {
         for (int i = 0; i < gameTags.size(); i++) {
             System.out.print(gameTags.get(i) + " ");
@@ -42,8 +49,10 @@ public class Rank {
         System.out.println();
     }
    
-    //Add new gameTag if is not present in the file other wise prints an error
-   
+    /**
+     * Adding the new user
+     * @param newTag gametag of the new user  
+     */
     public void addUser(String newTag) throws FileNotFoundException {
        
             if(!(gameTags.contains(newTag))) {
@@ -57,8 +66,11 @@ public class Rank {
             FileWriter();
     }
    
-    //Add Scores to players if it is higher that the one that they score before
-   
+    /**
+     * updating the score
+     * @param gameTag 
+     * @param newScore   
+     */
     public void addScore(String gameTag, int newScore) throws FileNotFoundException {
        
         if (gameTags.contains(gameTag)) {
@@ -74,8 +86,10 @@ public class Rank {
         FileWriter();
     }
    
-    //Get Score from the GameTag returns the score of certain gameTag if the tag exist
-   
+    /**
+     * retrieving the score
+     * @param gameTag  
+     */
     public int getScore(String gameTag) {
         for (int i = 0; i < gameTags.size(); i++) {
             if (gameTag.equals(gameTags.get(i)))
