@@ -34,12 +34,21 @@ public class PositionSearch {
 	public static int pentID;
 	public static ArrayList<int[]> answer;
 
+	/**
+     * Initializatoin of arrays  
+     */
 	public static void init() {
 		used = new boolean[Field.getWidth() + 5][Field.getHeight() + 5][4];
 		parent = new Parent[Field.getWidth() + 5][Field.getHeight() + 5][4];
 		answer = new ArrayList<>();
 	}
 
+	/**
+     * Building the best path
+     * @param obj the pentomino
+     * @param position position we are moving towards
+     * @param ui jpanel we are working with  
+     */
 	public static void buildBestPath(Pentomino obj, int[] position, UI ui) {
 		ArrayList<Move> path = new ArrayList<>();
 		int[] finalPos = new int[]{-1, -1, -1};
@@ -67,6 +76,11 @@ public class PositionSearch {
 		}
 	}
 
+
+	/**
+     * Searching for all possible final positions of pentomino with DFS algo
+     * @param obj the pentomino  
+     */
 	public static ArrayList<int[]> search(Pentomino obj) {
 		pentID = obj.getPentID();
 		int n = Field.getWidth() + 5, m = Field.getHeight() + 5;
@@ -82,6 +96,14 @@ public class PositionSearch {
 		return answer;
 	} 
 
+
+	/**
+     * Building the best path
+     * @param i x coord
+     * @param j y coord
+     * @param t id of rotation
+     * @param move move that leads to the current position  
+     */
 	public static void dfs(int i, int j, int t, int[] previous, Move move) {
 		if (used[i][j][t])
 			return;
