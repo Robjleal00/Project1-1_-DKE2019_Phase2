@@ -77,9 +77,7 @@ public class Rank {
     //Get Score from the GameTag returns the score of certain gameTag if the tag exist
    
     public int getScore(String gameTag) {
-        System.out.println(gameTags.size());
         for (int i = 0; i < gameTags.size(); i++) {
-            System.out.println(gameTags.get(i));
             if (gameTag.equals(gameTags.get(i)))
                 return scores.get(i);
         }

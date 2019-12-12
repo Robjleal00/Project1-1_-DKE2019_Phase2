@@ -65,18 +65,6 @@ public class PositionSearch {
 			    Thread.currentThread().interrupt();
 			}
 		}
-
-		boolean result = Field.updateScore();
-		if (!result)
-			return;
-
-		try {
-		    Thread.sleep(2000);
-		}
-		catch(InterruptedException ex) {
-		    Thread.currentThread().interrupt();
-		}
-		ui.setState(Field.getUsed());
 	}
 
 	public static ArrayList<int[]> search(Pentomino obj) {
